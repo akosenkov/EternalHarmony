@@ -7,7 +7,7 @@ my_token = 5
 now = datetime.datetime.now()
 my_date = f"{now.year}-{now.month}-{now.day}"
 
-infura_api_key = 'cbee44663ab949e5b301b44da6069380'
+infura_api_key = '<YOUR INFURA API KEY>'
 w3 = Web3(Web3.HTTPProvider(f"https://mainnet.infura.io/v3/{infura_api_key}"))
 w3.isConnected()
 
