@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Environment (secrets)
+.env
+.agent-mail-tokens/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+.cache/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# Beads local state
+.bv/
+
+# Temporary
+tmp/
+claude-docker/
+rules/
+eval/
+AGENTS.md
+specs/stakeholders.yml
+.mcps
+.claude-project-path
+.state/
