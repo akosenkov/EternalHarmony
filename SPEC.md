@@ -1,136 +1,67 @@
 # Project Specification
 
-> Fill this out before starting development. Agents read this for context.
-> Delete the instructional comments (lines starting with >) once filled in.
+*Frozen: 2026-09-09*
 
 ## Overview
 
-> One paragraph: what is this project and why does it exist?
+**harmony** is a canary project: a deliberately minimal command-line Fibonacci
+calculator. Its purpose is to prove the end-to-end delivery pipeline
+(spec → beads → execution → verification → release) works on this stack.
 
 **Project name:** harmony
-**Status:** Planning | In Progress | MVP | Production
-**Owner:** <!-- PM or tech lead name/handle -->
+**Status:** Planning
+**Owner:** alex.kosenkov
 
 ## Goals
 
-> What does success look like? List 3-5 measurable outcomes.
-
-1. <!-- e.g., "Users can sign up, log in, and manage their profile" -->
-2.
-3.
+1. `python main.py <n>` prints the nth Fibonacci number (0-indexed: fib(0)=0, fib(1)=1).
+2. Correct for large n — Python arbitrary-precision integers, no overflow.
+3. Invalid input produces a short error on stderr and a non-zero exit code.
 
 ## Non-goals
 
-> What is explicitly out of scope? Helps agents avoid gold-plating.
-
-- <!-- e.g., "Mobile app — web only for MVP" -->
--
+- No web UI, HTTP API, or any network interface — CLI only.
+- No third-party dependencies — Python standard library only.
+- No performance work beyond a simple iterative O(n) algorithm (no fast doubling, no matrix exponentiation, no memoization).
+- No sequence printing — output is a single number, not the series.
+- No negative-index Fibonacci (nega-fib).
+- No packaging or distribution (no PyPI, no installer); runs in place via `python main.py`.
 
 ## Users & Personas
 
-> Who uses this? What do they care about?
-
 | Persona | Needs | Pain points |
 |---------|-------|-------------|
-| <!-- e.g., "Data analyst" --> | <!-- "Fast search across datasets" --> | <!-- "Current tool is slow, no API" --> |
+| Operator (stakeholder) | Run `python main.py <n>` and read one number | Any setup beyond a Python ≥3.13 interpreter |
 
 ## Features & Requirements
 
-> Ordered by priority. Agents will work top-down unless told otherwise.
-
 ### P0 — Must have (MVP)
 
-- [ ] <!-- e.g., "REST API with /search endpoint returning paginated results" -->
-- [ ]
+- [ ] CLI Fibonacci calculator: `python main.py N` prints fib(N) for any non-negative integer N and exits 0. stdout is the bare decimal number plus a trailing newline — nothing else. Invalid input (missing argument, non-integer, negative) prints a short usage/error message to stderr and exits non-zero.
 
 ### P1 — Should have
 
-- [ ]
-- [ ]
+- (none — canary scope is deliberately P0-only)
 
 ### P2 — Nice to have
 
-- [ ]
-- [ ]
+- (none)
 
 ## Architecture
 
-> High-level system design. Agents use this to understand where code lives.
+Single module: `main.py` at the repository root. Stdlib only (`sys` for argv).
+Iterative O(n) loop using Python's native arbitrary-precision integers.
+Checks run via the existing `scripts/run_checks.sh` harness (ruff + pytest).
 
-**Stack:**
-- Language: Python 3.13
-- Framework: <!-- e.g., FastAPI, Django, Flask -->
-- Database: <!-- e.g., PostgreSQL, SQLite, none -->
-- Frontend: <!-- e.g., HTMX + Jinja2, React, none -->
-- Deployment: <!-- e.g., Docker, AWS Lambda, bare metal -->
+## Constraints
 
-**Module layout:**
-```
-app/              # Application code
-  api/            # API routes/endpoints
-  core/           # Business logic
-  models/         # Data models
-config/           # Configuration files
-scripts/          # Utility scripts
-tests/            # Test suite
-web/              # Frontend (if applicable)
-docs/             # Documentation
-```
+- Python ≥ 3.13 (`pyproject.toml`; `.python-version` pins 3.14).
+- Zero third-party dependencies: `pyproject.toml` `dependencies` must remain `[]`.
 
-> Adjust the tree above to match your actual or intended layout.
+## External Dependencies
 
-## Constraints & Decisions
+None.
 
-> Technical constraints agents must respect. Add rationale so agents don't revisit settled decisions.
+## Acceptance Criteria
 
-- <!-- e.g., "Use pyvips not Pillow for image processing — Pillow is too slow for large tiles" -->
-- <!-- e.g., "All config via python-decouple from .env — no os.getenv scattered in code" -->
-- <!-- e.g., "SQLite for MVP, migrate to PostgreSQL later — keep queries compatible" -->
-
-## External Dependencies & APIs
-
-> Services, APIs, or data sources this project integrates with.
-
-| Dependency | Purpose | Auth method | Docs |
-|-----------|---------|-------------|------|
-| <!-- e.g., "Stripe API" --> | <!-- "Payment processing" --> | <!-- "API key in .env" --> | <!-- "https://stripe.com/docs" --> |
-
-## Quality & Acceptance Criteria
-
-> How do we know a feature is done?
-
-- [ ] Tests pass (`./scripts/run_checks.sh`)
-- [ ] No ruff lint errors
-- [ ] Type checks pass (ty)
-- [ ] Works in Docker (`./claude-docker/claude-env.sh shell`)
-- <!-- Add project-specific criteria -->
-
-## Agent Coordination Notes
-
-> Guidance for multi-agent workflows via Agent Mail.
-
-**File ownership hints:**
-> Which areas are likely to conflict? Agents should reserve these before editing.
-
-| Area | Glob pattern | Notes |
-|------|-------------|-------|
-| <!-- e.g., "API routes" --> | <!-- "app/api/**" --> | <!-- "High contention — always reserve" --> |
-| <!-- e.g., "Database models" --> | <!-- "app/models/**" --> | <!-- "Schema changes need coordination" --> |
-
-**Coordination thread IDs:**
-> Suggested thread ID conventions for Agent Mail.
-
-- Features: `FEAT-<number>` (e.g., `FEAT-1`)
-- Bugs: `BUG-<number>`
-- Infra: `INFRA-<number>`
-
-## Open Questions
-
-> Unresolved decisions. Agents should flag these, not guess.
-
-- [ ] <!-- e.g., "Which OAuth provider? Google, GitHub, or both?" -->
-- [ ]
-
----
-
-*Last updated: <!-- date -->*
+See `ACCEPTANCE.md` (extracted verbatim from this spec).
